@@ -421,7 +421,7 @@ table.gap-table tr:hover td {
     <a href="#thesis" class="active">Thesis</a>
     <a href="#foundation">Foundation</a>
     <a href="#tenets">6 Tenets</a>
-    <a href="#roadmap">12-Month Roadmap</a>
+    <a href="#roadmap">18-Month Roadmap</a>
     <a href="#gap">Gap Analysis</a>
     <a href="#kpis">Success Metrics</a>
     <a href="#references">References</a>
@@ -509,7 +509,7 @@ table.gap-table tr:hover td {
         <div class="tenet-num">1</div>
         <div>
           <div class="tenet-title">Observability &amp; SLOs</div>
-          <div class="tenet-when">Months 1–3 · Foundation</div>
+          <div class="tenet-when">Months 1–5 · Foundation</div>
         </div>
       </div>
       <div class="tenet-summary">Define what "reliable" means in numbers. Without SLIs/SLOs/error budgets, every other tenet lacks a compass.</div>
@@ -555,7 +555,7 @@ table.gap-table tr:hover td {
         <div class="tenet-num">2</div>
         <div>
           <div class="tenet-title">Incident Remediation Pipeline</div>
-          <div class="tenet-when">Months 2–4 · Formalize</div>
+          <div class="tenet-when">Months 2–5 · Formalize</div>
         </div>
       </div>
       <div class="tenet-summary">RCAs happen fast and PRBs get executive briefings — but findings die there. Build the missing bridge from "we know what happened" to "here's the engineering work that prevents it next time."</div>
@@ -601,7 +601,7 @@ table.gap-table tr:hover td {
         <div class="tenet-num">3</div>
         <div>
           <div class="tenet-title">Toil Elimination &amp; Automation</div>
-          <div class="tenet-when">Months 3–6 · Prove Value</div>
+          <div class="tenet-when">Months 5–10 · Prove Value</div>
         </div>
       </div>
       <div class="tenet-summary">Measure manual, repetitive work — then systematically automate it. The Google SRE rule: keep toil below 50% of an SRE's time.</div>
@@ -646,7 +646,7 @@ table.gap-table tr:hover td {
         <div class="tenet-num">4</div>
         <div>
           <div class="tenet-title">Release Engineering &amp; CI/CD Maturity</div>
-          <div class="tenet-when">Months 4–7 · Reduce Change Risk</div>
+          <div class="tenet-when">Months 5–10 · Reduce Change Risk</div>
         </div>
       </div>
       <div class="tenet-summary">Changes cause most incidents. Mature the pipeline from "builds and deploys" to "safe, observable, rollback-ready releases." Enforce base image compliance for both active and dormant containers — build-breaker + scheduled refresh.</div>
@@ -694,7 +694,7 @@ table.gap-table tr:hover td {
         <div class="tenet-num">5</div>
         <div>
           <div class="tenet-title">Platform Resilience &amp; Capacity</div>
-          <div class="tenet-when">Months 6–10 · Harden</div>
+          <div class="tenet-when">Months 10–15 · Harden</div>
         </div>
       </div>
       <div class="tenet-summary">Move from "hope it works" to "prove it works" — chaos engineering, DR testing, capacity forecasting, and AEv3 migration with auto-scaling to avoid missed SLAs during burst processing.</div>
@@ -739,7 +739,7 @@ table.gap-table tr:hover td {
         <div class="tenet-num">6</div>
         <div>
           <div class="tenet-title">Culture, Enablement &amp; Scale</div>
-          <div class="tenet-when">Months 8–12+ · Sustain</div>
+          <div class="tenet-when">Months 15–18+ · Sustain</div>
         </div>
       </div>
       <div class="tenet-summary">An SRE practice that lives in one person's head dies when that person leaves. Embed reliability thinking into every team.</div>
@@ -785,8 +785,8 @@ table.gap-table tr:hover td {
 <!-- ═══════════════════ ROADMAP ═══════════════════ -->
 <section id="roadmap">
   <div class="section-label">04 — Roadmap</div>
-  <h2>12-Month Execution Plan</h2>
-  <p class="lead">Five phases, each producing demonstrable results that justify the next. Designed so Phase 0 can start Monday.</p>
+  <h2>18-Month Execution Plan</h2>
+  <p class="lead">Five phases, each producing demonstrable results that justify the next. Early wins land within 5 months; cross-team engineering and organizational change get realistic timelines. Designed so Phase 0 can start Monday.</p>
 
   <div class="timeline">
 
@@ -802,7 +802,7 @@ table.gap-table tr:hover td {
 
     <div class="timeline-item" data-phase="1">
       <div class="timeline-dot"></div>
-      <div class="timeline-phase">Phase 1 · Months 2–4</div>
+      <div class="timeline-phase">Phase 1 · Months 2–5</div>
       <div class="timeline-title">Measure — SLOs, SRE Dashboard, Remediation Pipeline</div>
       <div class="timeline-body">
         <strong>Deliverables:</strong> SLIs/SLOs for top-5 services. Error budget policy (draft). Remediation pipeline added to existing RCA/PRB process. <strong>Middle Office SRE Dashboard v1</strong> — built in Grafana, extended into MyCIO, or both — showing SLI gauges, SLO compliance, and error budget burn per service. First weekly SLO burn report to leadership.<br>
@@ -812,7 +812,7 @@ table.gap-table tr:hover td {
 
     <div class="timeline-item" data-phase="2">
       <div class="timeline-dot"></div>
-      <div class="timeline-phase">Phase 2 · Months 4–7</div>
+      <div class="timeline-phase">Phase 2 · Months 5–10</div>
       <div class="timeline-title">Automate — Toil Reduction, Pipeline Standards, Release Safety</div>
       <div class="timeline-body">
         <strong>Deliverables:</strong> Standardized GitLab CI pipeline templates with built-in quality gates. <strong>Base image compliance system:</strong> (1) build-breaker in GitLab CI rejecting stale bases on active builds, (2) scheduled refresh pipeline that auto-rebuilds dormant containers on current bases, opens green MRs or creates remediation JIRAs. Compliance dashboard in MyCIO/Grafana. CI/CD pipeline with automated post-deploy validation. Error-budget-aware release gate (pilot).<br>
@@ -822,7 +822,7 @@ table.gap-table tr:hover td {
 
     <div class="timeline-item" data-phase="3">
       <div class="timeline-dot"></div>
-      <div class="timeline-phase">Phase 3 · Months 7–10</div>
+      <div class="timeline-phase">Phase 3 · Months 10–15</div>
       <div class="timeline-title">Harden — Resilience, Capacity, Platform</div>
       <div class="timeline-body">
         <strong>Deliverables:</strong> AEv3 business case with quantified SLA impact from burst processing delays. Shared capacity pool proposal with funding model. AEv3 pilot migration for one high-burst service. First chaos engineering game day completed. DR playbook with measured RTO/RPO.<br>
@@ -832,7 +832,7 @@ table.gap-table tr:hover td {
 
     <div class="timeline-item" data-phase="4">
       <div class="timeline-dot"></div>
-      <div class="timeline-phase">Phase 4 · Months 10–12</div>
+      <div class="timeline-phase">Phase 4 · Months 15–18</div>
       <div class="timeline-title">Scale — Culture, Training, Self-Service</div>
       <div class="timeline-body">
         <strong>Deliverables:</strong> SRE onboarding curriculum published. Production readiness checklist enforced for new services. SRE Champions identified in 2+ dev teams. "State of Reliability" Q1 report to department leadership.<br>
@@ -917,7 +917,7 @@ table.gap-table tr:hover td {
     <div class="kpi-card">
       <div class="kpi-label">MTTR</div>
       <div class="kpi-value">−40%</div>
-      <div class="kpi-note">Mean Time to Recovery, 12-month target</div>
+      <div class="kpi-note">Mean Time to Recovery, 18-month target</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">Change Failure Rate</div>

@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRE Practice Plan — BNY Mellon Middle Office</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f1419;
+  --paper: #fafaf8;
+  --accent: #1a5f3a;
+  --accent-light: #e8f5ee;
+  --accent-mid: #2d8f5e;
+  --warm: #c4713b;
+  --warm-light: #fef3eb;
+  --slate: #4a5568;
+  --border: #e2e0dc;
+  --card: #ffffff;
+  --phase-0: #1a5f3a;
+  --phase-1: #1565c0;
+  --phase-2: #6a1b9a;
+  --phase-3: #c4713b;
+  --phase-4: #b71c1c;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ─── HEADER ─── */
+header {
+  padding: 3rem 0 2rem;
+  border-bottom: 3px solid var(--ink);
+}
+header .eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.6rem;
+  line-height: 1.15;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+header .subtitle {
+  font-size: 1.05rem;
+  color: var(--slate);
+  font-weight: 300;
+  max-width: 640px;
+}
+header .meta {
+  margin-top: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--slate);
+  letter-spacing: 0.05em;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 0;
+  margin-bottom: 2rem;
+}
+nav .container {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav .container::-webkit-scrollbar { display: none; }
+nav a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--slate);
+  padding: 0.4rem 0.75rem;
+  border-radius: 3px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+nav a:hover, nav a.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ─── SECTIONS ─── */
+section {
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+section:last-of-type { border-bottom: none; }
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.7rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+section p.lead {
+  font-size: 1rem;
+  color: var(--slate);
+  max-width: 680px;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+/* ─── TENETS GRID ─── */
+.tenets-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.tenet-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.tenet-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+}
+.tenet-card[data-priority="1"]::before { background: var(--phase-0); }
+.tenet-card[data-priority="2"]::before { background: var(--phase-1); }
+.tenet-card[data-priority="3"]::before { background: var(--phase-2); }
+.tenet-card[data-priority="4"]::before { background: var(--phase-3); }
+.tenet-card[data-priority="5"]::before { background: var(--phase-4); }
+.tenet-card[data-priority="6"]::before { background: var(--slate); }
+
+.tenet-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.tenet-card.expanded {
+  grid-column: 1 / -1;
+  border-color: var(--accent);
+}
+.tenet-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.tenet-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  color: var(--accent);
+  min-width: 1.5rem;
+}
+.tenet-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.tenet-when {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--warm);
+  letter-spacing: 0.05em;
+  margin-top: 0.15rem;
+}
+.tenet-summary {
+  font-size: 0.85rem;
+  color: var(--slate);
+  font-weight: 300;
+}
+.tenet-detail {
+  display: none;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.tenet-card.expanded .tenet-detail { display: block; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+.detail-col h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.detail-col ul {
+  list-style: none;
+  font-size: 0.82rem;
+  color: var(--slate);
+}
+.detail-col li {
+  padding: 0.2rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+.detail-col li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent-mid);
+  font-size: 0.75rem;
+}
+
+/* ─── TIMELINE ─── */
+.timeline {
+  position: relative;
+  padding-left: 2.5rem;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+  position: absolute;
+  left: -2.15rem;
+  top: 0.15rem;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+.timeline-item[data-phase="0"] .timeline-dot { border-color: var(--phase-0); background: var(--accent-light); }
+.timeline-item[data-phase="1"] .timeline-dot { border-color: var(--phase-1); background: #e3f2fd; }
+.timeline-item[data-phase="2"] .timeline-dot { border-color: var(--phase-2); background: #f3e5f5; }
+.timeline-item[data-phase="3"] .timeline-dot { border-color: var(--phase-3); background: var(--warm-light); }
+.timeline-item[data-phase="4"] .timeline-dot { border-color: var(--phase-4); background: #ffebee; }
+
+.timeline-phase {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+.timeline-item[data-phase="0"] .timeline-phase { color: var(--phase-0); }
+.timeline-item[data-phase="1"] .timeline-phase { color: var(--phase-1); }
+.timeline-item[data-phase="2"] .timeline-phase { color: var(--phase-2); }
+.timeline-item[data-phase="3"] .timeline-phase { color: var(--phase-3); }
+.timeline-item[data-phase="4"] .timeline-phase { color: var(--phase-4); }
+
+.timeline-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+.timeline-body {
+  font-size: 0.85rem;
+  color: var(--slate);
+  font-weight: 300;
+}
+.timeline-body strong { font-weight: 500; color: var(--ink); }
+
+/* ─── GAP TABLE ─── */
+table.gap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+table.gap-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 2px solid var(--ink);
+}
+table.gap-table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.gap-table tr:hover td {
+  background: var(--accent-light);
+}
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.tag-have { background: var(--accent-light); color: var(--accent); }
+.tag-gap { background: #fff3e0; color: #e65100; }
+.tag-partial { background: #e3f2fd; color: #1565c0; }
+
+/* ─── KPI STRIP ─── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: center;
+}
+.kpi-card .kpi-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 0.35rem;
+}
+.kpi-card .kpi-value {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  color: var(--accent);
+}
+.kpi-card .kpi-note {
+  font-size: 0.72rem;
+  color: var(--slate);
+  margin-top: 0.15rem;
+}
+
+/* ─── CALLOUT ─── */
+.callout {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.25rem;
+  border-radius: 0 6px 6px 0;
+  margin: 1.5rem 0;
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+.callout strong { color: var(--accent); }
+
+/* ─── PRINT ─── */
+@media print {
+  nav { display: none; }
+  .tenet-detail { display: block !important; }
+  .tenet-card { break-inside: avoid; }
+  section { border-bottom: 1px solid #ccc; }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  .tenets-grid { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+  header h1 { font-size: 1.8rem; }
+}
+
+.expand-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--slate);
+  opacity: 0.6;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<header>
+  <div class="eyebrow">Strategic Plan</div>
+  <h1>Building an SRE Practice<br>for Middle Office Services</h1>
+  <div class="subtitle">A zero-to-one roadmap for establishing Site Reliability Engineering within BNY Mellon's Middle Office — turning reactive incident response into a proactive, metrics-driven reliability discipline.</div>
+  <div class="meta">Andrew Gamache &nbsp;·&nbsp; SVP, Site Reliability Engineering Lead &nbsp;·&nbsp; April 2026</div>
+</header>
+</div>
+
+<nav>
+  <div class="container">
+    <a href="#thesis" class="active">Thesis</a>
+    <a href="#foundation">Foundation</a>
+    <a href="#tenets">6 Tenets</a>
+    <a href="#roadmap">12-Month Roadmap</a>
+    <a href="#gap">Gap Analysis</a>
+    <a href="#kpis">Success Metrics</a>
+    <a href="#references">References</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════ THESIS ═══════════════════ -->
+<section id="thesis">
+  <div class="section-label">01 — Thesis</div>
+  <h2>Why Middle Office Needs a Dedicated SRE Practice</h2>
+  <p class="lead">Middle Office sells electronic trade processing services to BNY's clients. Every minute of downtime, every failed trade, every missed SLA erodes client trust and revenue. Yet the team has no formal reliability discipline — incident response is reactive, monitoring is fragmented across too many tools with no unified reliability view, and changes are the #1 source of production incidents.</p>
+
+  <div class="callout">
+    <strong>The core problem:</strong> Without SLOs, error budgets, or structured toil measurement, the team cannot objectively prioritize reliability work against feature delivery. The SRE who should be engineering reliability is instead firefighting the consequences of ungoverned change. This plan fixes that.
+  </div>
+
+  <div class="kpi-strip" style="margin-top:1.5rem;">
+    <div class="kpi-card">
+      <div class="kpi-label">Current State</div>
+      <div class="kpi-value" style="font-size:1rem; color:var(--warm);">Reactive</div>
+      <div class="kpi-note">Incident-driven ops</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Target State</div>
+      <div class="kpi-value" style="font-size:1rem;">Proactive</div>
+      <div class="kpi-note">SLO-driven engineering</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Existing Win → Lesson</div>
+      <div class="kpi-value">80%</div>
+      <div class="kpi-note">Vuln reduction via base image policy — then compliance decayed without enforcement</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Approach</div>
+      <div class="kpi-value" style="font-size:1rem;">Grassroots</div>
+      <div class="kpi-note">Pilot → Prove → Scale</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:1.5rem;">
+    <strong>Case study — why policy without enforcement fails:</strong> A base image upgrade policy reduced container vulnerabilities by 80% in Q1–Q3 2025. Within months, compliance decayed — teams stopped upgrading to the quarterly base images. Today, 80% of Docker images are built on base images more than 6 months old, and vulnerabilities are back up. The policy was right. The enforcement mechanism was missing. This plan fixes that with automated build-breakers in the CI/CD pipeline (Tenet 4) — so compliance is enforced at build time, not by memo.
+  </div>
+</section>
+
+<!-- ═══════════════════ FOUNDATION ═══════════════════ -->
+<section id="foundation">
+  <div class="section-label">02 — Foundation Already Laid</div>
+  <h2>Starting Position (Not Zero)</h2>
+  <p class="lead">Two years of work — title change, platform engineering, CI/CD pipelines, monitoring, incident management — has created a launching pad. The plan below builds on what exists rather than replacing it.</p>
+
+  <table class="gap-table">
+    <thead>
+      <tr><th>Capability</th><th>Current State</th><th>Maturity</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Incident Management &amp; RCA</td><td>Active: 24×6 follow-the-sun, same-day RCA, SNOW INC → PRB → exec briefing</td><td><span class="tag tag-have">Strong</span></td></tr>
+      <tr><td>Monitoring &amp; Alerting</td><td>Splunk, AppDynamics, Grafana, Moogsoft, MyCIO</td><td><span class="tag tag-have">Strong</span></td></tr>
+      <tr><td>CI/CD</td><td>GitLab pipelines for build/test/deploy</td><td><span class="tag tag-partial">Partial</span></td></tr>
+      <tr><td>Platform Engineering</td><td>RHEL, VMWare, Nomad/Docker containers</td><td><span class="tag tag-partial">Partial</span></td></tr>
+      <tr><td>Change Management</td><td>CAB Chair, RFC process</td><td><span class="tag tag-have">Strong</span></td></tr>
+      <tr><td>AI / Tooling R&amp;D</td><td>Windsurf/Claude for rapid prototyping, validation automation</td><td><span class="tag tag-partial">Partial</span></td></tr>
+      <tr><td>SLOs / Error Budgets</td><td>Not formally defined</td><td><span class="tag tag-gap">Gap</span></td></tr>
+      <tr><td>Infrastructure as Code</td><td>Nomad/AppEngine with assemblies</td><td><span class="tag tag-partial">Partial</span></td></tr>
+      <tr><td>Container Orchestration</td><td>AEv2 (Nomad) — manual scaling, 2–20 instances per service, burst spikes cause hours of delayed processing</td><td><span class="tag tag-gap">Gap</span></td></tr>
+      <tr><td>Remediation Loop</td><td>Same-day RCA → SNOW PRB → exec briefing, but no systematic RCA-to-engineering pipeline</td><td><span class="tag tag-partial">Partial</span></td></tr>
+      <tr><td>Base Image Compliance</td><td>Quarterly base image policy exists; 80% of containers on images &gt;6 months old — no automated enforcement</td><td><span class="tag tag-gap">Gap</span></td></tr>
+      <tr><td>Chaos Engineering</td><td>None</td><td><span class="tag tag-gap">Gap</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════ TENETS ═══════════════════ -->
+<section id="tenets">
+  <div class="section-label">03 — The Six Tenets</div>
+  <h2>SRE Tenets, Prioritized</h2>
+  <p class="lead">Six pillars, ordered by dependency and impact. Each tenet has a clear "what," "how," and "why first." Click any card to expand.</p>
+
+  <div class="tenets-grid">
+
+    <!-- TENET 1 -->
+    <div class="tenet-card" data-priority="1" onclick="toggle(this)">
+      <div class="tenet-header">
+        <div class="tenet-num">1</div>
+        <div>
+          <div class="tenet-title">Observability &amp; SLOs</div>
+          <div class="tenet-when">Months 1–3 · Foundation</div>
+        </div>
+      </div>
+      <div class="tenet-summary">Define what "reliable" means in numbers. Without SLIs/SLOs/error budgets, every other tenet lacks a compass.</div>
+      <div class="expand-hint">click to expand →</div>
+      <div class="tenet-detail">
+        <div class="detail-grid">
+          <div class="detail-col">
+            <h4>What to Build</h4>
+            <ul>
+              <li>SLIs per critical service (trade processing latency, settlement success rate, message throughput)</li>
+              <li>SLOs co-defined with Business and Client Services</li>
+              <li>Error budgets tied to release governance</li>
+              <li><strong>Middle Office SRE Dashboard</strong> — a dedicated reliability view that does not exist today. MyCIO shows what's broken <em>now</em>; the SRE Dashboard shows how reliable we are <em>over time</em>, how fast we're burning error budget, and whether we should ship or stabilize. This is a concrete engineering deliverable (see build options below).</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>How to Develop</h4>
+            <ul>
+              <li>Audit top-5 services by incident volume</li>
+              <li>Workshop with dev leads + COO to agree SLO targets</li>
+              <li>Instrument SLIs from existing AppDynamics/Splunk telemetry</li>
+              <li>Build SRE Dashboard — platform decision (Grafana, MyCIO extension, or both) to be evaluated in Phase 0</li>
+              <li>Publish weekly SLO burn reports</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>Why First</h4>
+            <ul>
+              <li>Gives leadership an objective reliability score — not "is anything broken right now" but "how reliable are we this month"</li>
+              <li>Error budgets create natural prioritization framework — no more arguing about reliability vs. features</li>
+              <li>MyCIO already aggregates vendor data — adding SLO/SLI panels extends what people already look at</li>
+              <li>Directly maps to BNY SRE JD: "defining SLOs and SLIs, improving observability"</li>
+              <li>Builds on existing monitoring investment</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TENET 2 -->
+    <div class="tenet-card" data-priority="2" onclick="toggle(this)">
+      <div class="tenet-header">
+        <div class="tenet-num">2</div>
+        <div>
+          <div class="tenet-title">Incident Remediation Pipeline</div>
+          <div class="tenet-when">Months 2–4 · Formalize</div>
+        </div>
+      </div>
+      <div class="tenet-summary">RCAs happen fast and PRBs get executive briefings — but findings die there. Build the missing bridge from "we know what happened" to "here's the engineering work that prevents it next time."</div>
+      <div class="expand-hint">click to expand →</div>
+      <div class="tenet-detail">
+        <div class="detail-grid">
+          <div class="detail-col">
+            <h4>What to Build</h4>
+            <ul>
+              <li>Remediation pipeline: every PRB produces tagged action items (monitoring, alerting, QA gate, policy, code fix)</li>
+              <li>Action item tracking with ownership, SLO linkage, and due dates</li>
+              <li>Preventive controls catalog: what monitoring/alerting/QA should have caught this?</li>
+              <li>On-call runbooks per service (built from recurring incident patterns)</li>
+              <li>Monthly incident trend analysis tied to error budgets</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>How to Develop</h4>
+            <ul>
+              <li>Extend the existing RCA → PRB → exec briefing with a mandatory "remediation actions" section</li>
+              <li>Classify each action: new alert, monitoring gap, QA test, code fix, policy change, runbook update</li>
+              <li>Route actions into JIRA with SRE/Dev ownership — track completion rate quarterly</li>
+              <li>Build runbook repo in Confluence from the top-10 recurring incident types</li>
+              <li>Monthly review: which remediations shipped, which incidents would have been prevented</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>Why Second</h4>
+            <ul>
+              <li>The RCA/PRB process is already strong and fast — this tenet closes the last mile</li>
+              <li>Remediation actions feed directly into Tenets 3–5 (automation, CI/CD, resilience)</li>
+              <li>Turns executive briefings from "here's what happened" into "here's what we're doing about it"</li>
+              <li>Maps to JD: "leading incident management through postmortems and automated recovery"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TENET 3 -->
+    <div class="tenet-card" data-priority="3" onclick="toggle(this)">
+      <div class="tenet-header">
+        <div class="tenet-num">3</div>
+        <div>
+          <div class="tenet-title">Toil Elimination &amp; Automation</div>
+          <div class="tenet-when">Months 3–6 · Prove Value</div>
+        </div>
+      </div>
+      <div class="tenet-summary">Measure manual, repetitive work — then systematically automate it. The Google SRE rule: keep toil below 50% of an SRE's time.</div>
+      <div class="expand-hint">click to expand →</div>
+      <div class="tenet-detail">
+        <div class="detail-grid">
+          <div class="detail-col">
+            <h4>What to Build</h4>
+            <ul>
+              <li>Toil taxonomy and tracking system</li>
+              <li>Automation for the highest-toil operational tasks (identified by measurement)</li>
+              <li>Self-healing automation for known failure modes</li>
+              <li>AI-assisted tooling for rapid development of support scripts and validation tools</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>How to Develop</h4>
+            <ul>
+              <li>Time-track all operational tasks for 2 weeks — classify as toil vs. engineering</li>
+              <li>Rank toil tasks by frequency × time × risk of error</li>
+              <li>Automate top-5 toil tasks by rank</li>
+              <li>Set quarterly toil reduction target (e.g., −20%)</li>
+              <li>Measure: are we spending less time on toil each quarter?</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>Why Third</h4>
+            <ul>
+              <li>Directly addresses the problem statement: too much time on incidents, not enough on engineering</li>
+              <li>Returns time — each automation frees hours for Tenets 4–6</li>
+              <li>Maps to JD: "automating infrastructure and operations"</li>
+              <li>Quick, visible wins build organizational buy-in</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TENET 4 -->
+    <div class="tenet-card" data-priority="4" onclick="toggle(this)">
+      <div class="tenet-header">
+        <div class="tenet-num">4</div>
+        <div>
+          <div class="tenet-title">Release Engineering &amp; CI/CD Maturity</div>
+          <div class="tenet-when">Months 4–7 · Reduce Change Risk</div>
+        </div>
+      </div>
+      <div class="tenet-summary">Changes cause most incidents. Mature the pipeline from "builds and deploys" to "safe, observable, rollback-ready releases." Enforce base image compliance for both active and dormant containers — build-breaker + scheduled refresh.</div>
+      <div class="expand-hint">click to expand →</div>
+      <div class="tenet-detail">
+        <div class="detail-grid">
+          <div class="detail-col">
+            <h4>What to Build</h4>
+            <ul>
+              <li><strong>Base image compliance system</strong> — two-pronged: (1) build-breaker that rejects stale bases on active builds, (2) scheduled refresh pipeline that auto-rebuilds dormant containers and opens MRs or JIRAs. Covers 100% of containers.</li>
+              <li>Automated pre-deploy and post-deploy validation gates</li>
+              <li>Canary / blue-green deployment patterns</li>
+              <li>Change failure rate (CFR) tracking per service</li>
+              <li>Error-budget-aware release gating</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>How to Develop</h4>
+            <ul>
+              <li>Implement base image build-breaker and scheduled refresh pipeline (see playbook for detailed design)</li>
+              <li>Extend MO pipeline standard with automated smoke tests post-deploy</li>
+              <li>Integrate SLO dashboards into deploy pipeline — block releases when error budget exhausted</li>
+              <li>Pilot canary deploys on one service with automated rollback</li>
+              <li>Build deploy-time metric capture (before/after latency, error rate)</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>Why Fourth</h4>
+            <ul>
+              <li>Directly attacks root cause: change-related incidents and Monday P3 floods</li>
+              <li>Build-breaker + scheduled refresh together cover 100% of containers — active and dormant — with zero ongoing human effort</li>
+              <li>Proves the SRE principle: enforce with automation, not memos</li>
+              <li>Requires SLOs (Tenet 1) and remediation data (Tenet 2) to prioritize which gates to build first</li>
+              <li>Maps to JD: "CI/CD pipelines, container orchestration"</li>
+              <li>Leverages existing GitLab investment and CAB experience</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TENET 5 -->
+    <div class="tenet-card" data-priority="5" onclick="toggle(this)">
+      <div class="tenet-header">
+        <div class="tenet-num">5</div>
+        <div>
+          <div class="tenet-title">Platform Resilience &amp; Capacity</div>
+          <div class="tenet-when">Months 6–10 · Harden</div>
+        </div>
+      </div>
+      <div class="tenet-summary">Move from "hope it works" to "prove it works" — chaos engineering, DR testing, capacity forecasting, and AEv3 migration with auto-scaling to avoid missed SLAs during burst processing.</div>
+      <div class="expand-hint">click to expand →</div>
+      <div class="tenet-detail">
+        <div class="detail-grid">
+          <div class="detail-col">
+            <h4>What to Build</h4>
+            <ul>
+              <li><strong>AEv3 migration with shared capacity pool</strong> — move services from AEv2 (Nomad, manual scaling) to AEv3 (Kubernetes, auto-scaling). Establish a shared department overhead pool so any service can burst from normal instance count to MAX_INSTANCES during load spikes, then scale back down. Avoids missed SLAs from hours-long processing delays.</li>
+              <li>Chaos engineering program (game days for Middle Office services)</li>
+              <li>DR/failover testing cadence with measurable RTO/RPO</li>
+              <li>Capacity model per service (normal load, burst ceiling, scaling triggers)</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>How to Develop</h4>
+            <ul>
+              <li>Build the business case: document burst processing incidents where 10 instances took hours but 100 could have taken 10 minutes — quantify missed SLAs and client impact</li>
+              <li>Propose shared department overhead pool — all apps contribute to funding the burst capacity, any app can auto-scale into it</li>
+              <li>Pilot AEv3 migration with one high-burst service to prove the auto-scaling model</li>
+              <li>Start chaos with read-only tests: kill one container, measure recovery</li>
+              <li>Graduate to quarterly game days with business stakeholders observing</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>Why Fifth</h4>
+            <ul>
+              <li>Directly prevents missed SLAs — burst processing that takes hours today becomes minutes with auto-scaling</li>
+              <li>Requires Tenets 1–4 as inputs (SLOs to define targets, pipelines to deploy, data to build the business case)</li>
+              <li>Chaos engineering is the proof that the practice works</li>
+              <li>Maps to JD: "Kubernetes, fault-tolerant deployments, scalable operations"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TENET 6 -->
+    <div class="tenet-card" data-priority="6" onclick="toggle(this)">
+      <div class="tenet-header">
+        <div class="tenet-num">6</div>
+        <div>
+          <div class="tenet-title">Culture, Enablement &amp; Scale</div>
+          <div class="tenet-when">Months 8–12+ · Sustain</div>
+        </div>
+      </div>
+      <div class="tenet-summary">An SRE practice that lives in one person's head dies when that person leaves. Embed reliability thinking into every team.</div>
+      <div class="expand-hint">click to expand →</div>
+      <div class="tenet-detail">
+        <div class="detail-grid">
+          <div class="detail-col">
+            <h4>What to Build</h4>
+            <ul>
+              <li>SRE onboarding curriculum (modeled on StanChart's SRE Academy)</li>
+              <li>Embedded SRE coaching for dev teams</li>
+              <li>Reliability review as part of architecture review process</li>
+              <li>Self-service reliability tooling (SLO dashboards, runbook templates)</li>
+              <li>Production readiness checklist for new services</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>How to Develop</h4>
+            <ul>
+              <li>Document everything from Tenets 1–5 as playbooks</li>
+              <li>Run monthly "Reliability Office Hours" — open to all dev teams</li>
+              <li>Require production readiness review before any new service goes live</li>
+              <li>Create SRE Champions program: train one engineer per dev team</li>
+              <li>Publish quarterly "State of Reliability" report to leadership</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <h4>Why Last</h4>
+            <ul>
+              <li>Culture change requires results to point to — Tenets 1–5 provide them</li>
+              <li>Scales the practice beyond one person</li>
+              <li>Maps to JD: "mentoring engineers, promoting SRE best practices, reliability-first culture"</li>
+              <li>The endgame: SRE as a discipline, not a person</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ ROADMAP ═══════════════════ -->
+<section id="roadmap">
+  <div class="section-label">04 — Roadmap</div>
+  <h2>12-Month Execution Plan</h2>
+  <p class="lead">Five phases, each producing demonstrable results that justify the next. Designed so Phase 0 can start Monday.</p>
+
+  <div class="timeline">
+
+    <div class="timeline-item" data-phase="0">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">Phase 0 · Weeks 1–4</div>
+      <div class="timeline-title">Establish the Practice</div>
+      <div class="timeline-body">
+        <strong>Deliverables:</strong> SRE charter document. Service catalog of Middle Office's top-10 critical services ranked by client impact. Toil baseline (2-week time study). Stakeholder alignment meetings with Dev Leads, COO, Client Services.<br>
+        <strong>Key action:</strong> Get explicit agreement that SRE time is protected — not absorbed by BAU incident work. Define the 50/50 rule: max 50% operational work, min 50% engineering.
+      </div>
+    </div>
+
+    <div class="timeline-item" data-phase="1">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">Phase 1 · Months 2–4</div>
+      <div class="timeline-title">Measure — SLOs, SRE Dashboard, Remediation Pipeline</div>
+      <div class="timeline-body">
+        <strong>Deliverables:</strong> SLIs/SLOs for top-5 services. Error budget policy (draft). Remediation pipeline added to existing RCA/PRB process. <strong>Middle Office SRE Dashboard v1</strong> — built in Grafana, extended into MyCIO, or both — showing SLI gauges, SLO compliance, and error budget burn per service. First weekly SLO burn report to leadership.<br>
+        <strong>Key metric:</strong> 100% of P1/P2 PRBs produce tracked remediation action items with ownership and due dates.
+      </div>
+    </div>
+
+    <div class="timeline-item" data-phase="2">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">Phase 2 · Months 4–7</div>
+      <div class="timeline-title">Automate — Toil Reduction, Pipeline Standards, Release Safety</div>
+      <div class="timeline-body">
+        <strong>Deliverables:</strong> Standardized GitLab CI pipeline templates with built-in quality gates. <strong>Base image compliance system:</strong> (1) build-breaker in GitLab CI rejecting stale bases on active builds, (2) scheduled refresh pipeline that auto-rebuilds dormant containers on current bases, opens green MRs or creates remediation JIRAs. Compliance dashboard in MyCIO/Grafana. CI/CD pipeline with automated post-deploy validation. Error-budget-aware release gate (pilot).<br>
+        <strong>Key metric:</strong> 30% reduction in toil hours. Change failure rate tracked and trending down. Base image compliance back to &gt;95% across all containers (active and dormant).
+      </div>
+    </div>
+
+    <div class="timeline-item" data-phase="3">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">Phase 3 · Months 7–10</div>
+      <div class="timeline-title">Harden — Resilience, Capacity, Platform</div>
+      <div class="timeline-body">
+        <strong>Deliverables:</strong> AEv3 business case with quantified SLA impact from burst processing delays. Shared capacity pool proposal with funding model. AEv3 pilot migration for one high-burst service. First chaos engineering game day completed. DR playbook with measured RTO/RPO.<br>
+        <strong>Key metric:</strong> Mean Time to Recovery (MTTR) reduced by 40% from baseline. Pilot service burst processing: hours → minutes.
+      </div>
+    </div>
+
+    <div class="timeline-item" data-phase="4">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">Phase 4 · Months 10–12</div>
+      <div class="timeline-title">Scale — Culture, Training, Self-Service</div>
+      <div class="timeline-body">
+        <strong>Deliverables:</strong> SRE onboarding curriculum published. Production readiness checklist enforced for new services. SRE Champions identified in 2+ dev teams. "State of Reliability" Q1 report to department leadership.<br>
+        <strong>Key metric:</strong> At least 2 dev teams self-managing their own SLO dashboards and remediation tracking.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ GAP ANALYSIS ═══════════════════ -->
+<section id="gap">
+  <div class="section-label">05 — Technology &amp; Skill Gap Analysis</div>
+  <h2>Current vs. Target Stack</h2>
+  <p class="lead">Cross-referenced against the BNY SRE job description and industry standard practice at Vanguard, DBS Bank, and Standard Chartered.</p>
+
+  <table class="gap-table">
+    <thead>
+      <tr><th>Domain</th><th>Current</th><th>Target</th><th>Gap</th><th>Phase</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Observability &amp; SRE Dashboard</strong></td>
+        <td>Splunk, AppDynamics, Grafana, Moogsoft, MyCIO — strong operational monitoring, but no SLI/SLO/error budget view</td>
+        <td>Middle Office SRE Dashboard with SLI gauges, SLO targets, error budget burn — unifying fragmented monitoring into a single reliability view</td>
+        <td><span class="tag tag-gap">Build</span></td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td><strong>Incident Mgmt</strong></td>
+        <td>Same-day RCA → SNOW PRB → exec briefing</td>
+        <td>+ Remediation pipeline: PRB findings → categorized engineering actions → tracked to completion</td>
+        <td><span class="tag tag-partial">Close the loop</span></td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td><strong>CI/CD — Extend MO Standard</strong></td>
+        <td>BNY enterprise pipeline standard adopted</td>
+        <td>Extend with Middle Office-specific best practices: blue-green deploys, canary releases, automated validation, rollback</td>
+        <td><span class="tag tag-partial">Extend</span></td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td><strong>CI/CD — Rollout</strong></td>
+        <td>Extended MO standard not yet built (depends on above)</td>
+        <td>Roll out the MO pipeline standard across all Middle Office applications — team-by-team adoption, migration tracking</td>
+        <td><span class="tag tag-gap">Roll out</span></td>
+        <td>3–4</td>
+      </tr>
+      <tr>
+        <td><strong>Containers &amp; Scaling</strong></td>
+        <td>AEv2 (Nomad) — manual scaling only, burst spikes cause hours of delayed trade processing and missed SLAs</td>
+        <td>AEv3 (Kubernetes) with auto-scaling into a shared department overhead pool — burst to MAX_INSTANCES in minutes, scale back down</td>
+        <td><span class="tag tag-gap">Migrate</span></td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td><strong>Chaos Eng.</strong></td>
+        <td>None</td>
+        <td>Controlled failure injection, quarterly game days</td>
+        <td><span class="tag tag-gap">Build</span></td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td><strong>Culture</strong></td>
+        <td>One SRE champion, no formal program</td>
+        <td>SRE Academy, embedded coaching, reliability reviews</td>
+        <td><span class="tag tag-gap">Build</span></td>
+        <td>4</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════ KPIs ═══════════════════ -->
+<section id="kpis">
+  <div class="section-label">06 — Success Metrics</div>
+  <h2>How We Know It's Working</h2>
+  <p class="lead">Four DORA metrics plus four SRE-specific KPIs. Baseline in Phase 0, measure quarterly.</p>
+
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-label">MTTR</div>
+      <div class="kpi-value">−40%</div>
+      <div class="kpi-note">Mean Time to Recovery, 12-month target</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Change Failure Rate</div>
+      <div class="kpi-value">−50%</div>
+      <div class="kpi-note">% of deployments causing incidents</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Toil Ratio</div>
+      <div class="kpi-value">&lt;50%</div>
+      <div class="kpi-note">Operational work as % of SRE time</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">SLO Compliance</div>
+      <div class="kpi-value">≥95%</div>
+      <div class="kpi-note">Services meeting SLO targets</div>
+    </div>
+  </div>
+
+  <div class="kpi-strip" style="margin-top:1rem;">
+    <div class="kpi-card">
+      <div class="kpi-label">eRFCs &amp; LTEs</div>
+      <div class="kpi-value">−50%</div>
+      <div class="kpi-note">Emergency changes and late-to-execute releases</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Remediation Rate</div>
+      <div class="kpi-value">100%</div>
+      <div class="kpi-note">P1/P2 PRBs with tracked remediation actions</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Error Budget Burn</div>
+      <div class="kpi-value">Tracked</div>
+      <div class="kpi-note">Per-service weekly reporting</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Automation Coverage</div>
+      <div class="kpi-value">↑ QoQ</div>
+      <div class="kpi-note">% of top failure modes with auto-recovery</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ REFERENCES ═══════════════════ -->
+<section id="references">
+  <div class="section-label">07 — References &amp; Precedent</div>
+  <h2>Industry Precedent</h2>
+  <p class="lead">This plan isn't theoretical. These financial institutions have published their SRE journeys.</p>
+
+  <table class="gap-table">
+    <thead>
+      <tr><th>Organization</th><th>Relevance</th><th>Key Lesson</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong><a href="https://www.infoq.com/presentations/vanguard-sre-transformation" target="_blank" style="color:var(--accent);">Vanguard</a></strong></td>
+        <td>Grassroots SRE transformation at a 50-year financial firm</td>
+        <td>Started small in 2018, built coaching hub, standardized on OpenTelemetry, now doing chaos engineering and AI testing</td>
+      </tr>
+      <tr>
+        <td><strong><a href="https://medium.com/dbs-tech-blog/site-reliability-engineering-at-dbs-bank-32c02228ccf4" target="_blank" style="color:var(--accent);">DBS Bank</a></strong></td>
+        <td>SRE at Asia's largest bank — "World's Best Bank"</td>
+        <td>Merged RPA with SRE for toil reduction; blameless culture and chaos engineering were force multipliers</td>
+      </tr>
+      <tr>
+        <td><strong><a href="https://qa-financial.com/how-site-reliability-engineering-is-driving-qa-stability-at-standard-chartered/" target="_blank" style="color:var(--accent);">Standard Chartered</a></strong></td>
+        <td>SRE Academy model in regulated banking</td>
+        <td>5 SRE evangelists → enterprise-wide adoption. 100-day application review cycles. SRE as career path, not just a role</td>
+      </tr>
+      <tr>
+        <td><strong><a href="https://sre.google/sre-book/table-of-contents/" target="_blank" style="color:var(--accent);">Google SRE Book</a></strong></td>
+        <td>Foundational framework</td>
+        <td>50% toil cap, error budgets as decision-making currency, postmortems without blame</td>
+      </tr>
+      <tr>
+        <td><strong><a href="https://www.academicpublishers.org/journals/index.php/ijns/article/view/10098" target="_blank" style="color:var(--accent);">FEBF Framework</a></strong></td>
+        <td>Financial-sector error budgeting</td>
+        <td>Risk-tiered SLO design, burn-rate-driven release governance, DORA/FFIEC compliance alignment</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top:1.5rem;">
+    <strong>Bottom line:</strong> Every major bank that has successfully built an SRE practice started the same way — one person, a small pilot, measurable results, then organizational buy-in. The difference between "I do SRE things" and "we have an SRE practice" is the framework, the metrics, and the mandate. This plan provides all three.
+  </div>
+</section>
+
+</div><!-- .container -->
+
+<footer style="text-align:center; padding:2rem; font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--slate); letter-spacing:0.1em;">
+  SRE PRACTICE PLAN · BNY MELLON MIDDLE OFFICE · APRIL 2026 · CONFIDENTIAL
+</footer>
+
+<script>
+function toggle(card) {
+  const wasExpanded = card.classList.contains('expanded');
+  document.querySelectorAll('.tenet-card').forEach(c => c.classList.remove('expanded'));
+  if (!wasExpanded) card.classList.add('expanded');
+}
+
+// Sticky nav active state
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav a');
+
+function updateNav() {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+
+// Smooth scroll
+navLinks.forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>
